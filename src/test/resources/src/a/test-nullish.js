@@ -1,0 +1,1 @@
+function foo(value) { return value ?? 1; }

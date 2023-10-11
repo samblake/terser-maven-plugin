@@ -1,3 +1,3 @@
-var x = function(x, y) {
-    return x * y;
+var x = function (first, second) {
+    return first * second;
 }
