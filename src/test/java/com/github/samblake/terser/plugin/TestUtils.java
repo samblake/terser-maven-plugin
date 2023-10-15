@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 public class TestUtils {
 
     public static final String TERSER_JS = "terser-5.21.0.js";
+    public static final String SOURCE_MAP_JS = "source-map-0.7.3.js";
 
     public static Path getBasePath() {
         try {
@@ -29,8 +30,13 @@ public class TestUtils {
         }
     }
 
-    public static String getResourceAsString(String resource) {
-        return getResourceAsString(TestUtils.class, resource);
+    public static Path getSourceMapPath() {
+        try {
+            return Paths.get(TestUtils.class.getResource("/" + SOURCE_MAP_JS).toURI());
+        }
+        catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static String getResourceAsString(Class<TestUtils> aClass, String resource) {

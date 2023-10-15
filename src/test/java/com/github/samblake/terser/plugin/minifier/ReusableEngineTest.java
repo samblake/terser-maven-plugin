@@ -75,7 +75,7 @@ public class ReusableEngineTest {
     /*
      * This test shows that re-using an engine to minify multiple sources in parallel is
      * not a good idea. When using a multithreaded executor {@link Executors#newFixedThreadPool(int)},
-     * errors start to occur while transpiling.
+     * errors start to occur while minifying.
      *
      * However, because loading the terser library into the engine takes quite some time, it is a good
      * idea to eval the minified terser once, and then reuse the engine to minify each source file.
@@ -115,7 +115,7 @@ public class ReusableEngineTest {
 
             stopwatch.start();
             int n = 100;
-            log.info(format("Transpiling %d sources ...", n));
+            log.info(format("Minifying %d sources ...", n));
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             for (int i = 0; i < n; i++) {
                 executorService.submit(task);

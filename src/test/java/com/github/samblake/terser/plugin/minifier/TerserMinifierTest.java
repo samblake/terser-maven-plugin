@@ -1,6 +1,5 @@
 package com.github.samblake.terser.plugin.minifier;
 
-import com.github.samblake.terser.plugin.TestUtils;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.junit.Rule;
@@ -10,7 +9,11 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.nio.file.Paths;
+import java.util.Optional;
 
+import static com.github.samblake.terser.plugin.TestUtils.getBasePath;
+import static com.github.samblake.terser.plugin.TestUtils.getSourceMapPath;
+import static com.github.samblake.terser.plugin.TestUtils.getTerserPath;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,17 +24,17 @@ public class TerserMinifierTest {
 
     private Log log = new SystemStreamLog();
 
-    private ImmutableMinificationContext.Builder contextBuilder = ImmutableMinificationContext.builder()
-            .isVerbose(true)
+    private com.github.samblake.terser.plugin.minifier.ImmutableMinificationContext.Builder contextBuilder = com.github.samblake.terser.plugin.minifier.ImmutableMinificationContext.builder().
+            isVerbose(true)
             .log(log)
-            .terserSource(TestUtils.getTerserPath().toFile())
+            .terserSource(getTerserPath().toFile())
             .charset(UTF_8);
 
     @Test
     public void shouldMinifyEs6File() {
         //given
-        Minification minification = ImmutableMinification.builder()
-                .source(TestUtils.getBasePath().resolve(Paths.get("src", "a", "test-es6.js")))
+        Minification minification = com.github.samblake.terser.plugin.minifier.ImmutableMinification.builder()
+                .source(getBasePath().resolve(Paths.get("src", "a", "test-es6.js")))
                 .target(Paths.get("foo"))
                 .context(contextBuilder.options("{}").build())
                 .build();
@@ -45,8 +48,8 @@ public class TerserMinifierTest {
     @Test
     public void shouldMinifyToplevelEs6File() {
         //given
-        Minification minification = ImmutableMinification.builder()
-                .source(TestUtils.getBasePath().resolve(Paths.get("src", "a", "test-es6.js")))
+        Minification minification = com.github.samblake.terser.plugin.minifier.ImmutableMinification.builder()
+                .source(getBasePath().resolve(Paths.get("src", "a", "test-es6.js")))
                 .target(Paths.get("foo"))
                 .context(contextBuilder.options("{toplevel:true}").build())
                 .build();
@@ -60,8 +63,8 @@ public class TerserMinifierTest {
     @Test
     public void shouldMinifyNullishCoalescing() {
         //given
-        Minification minification = ImmutableMinification.builder()
-                .source(TestUtils.getBasePath().resolve(Paths.get("src", "a", "test-nullish.js")))
+        Minification minification = com.github.samblake.terser.plugin.minifier.ImmutableMinification.builder()
+                .source(getBasePath().resolve(Paths.get("src", "a", "test-nullish.js")))
                 .target(Paths.get("foo"))
                 .context(contextBuilder.options("{}").build())
                 .build();
@@ -72,22 +75,23 @@ public class TerserMinifierTest {
                 "function foo(n){return n??1}");
     }
 
-    /*@Test
+    @Test
     public void shouldGenerateSourceMaps() {
         //given
-        Minification minification = ImmutableMinification.builder()
-                .source(TestUtils.getBasePath().resolve(Paths.get("src", "a", "test-es6.js")))
+        Minification minification = com.github.samblake.terser.plugin.minifier.ImmutableMinification.builder()
+                .source(getBasePath().resolve(Paths.get("src", "a", "test-es6.js")))
                 .target(Paths.get("foo"))
-                .context(contextBuilder.options("{sourceMap: {\n"
-                        + "        filename: \"out.js\",\n"
-                        + "        url: \"out.js.map\"\n"
-                        + "    }}").build())
+                .context(contextBuilder
+                        .sourceMapSource(Optional.of(getSourceMapPath().toFile()))
+                        .options("{sourceMap: true}")
+                        .build())
                 .build();
         //when
         minification = new TerserMinifier().execute(minification);
         //then
         assertThat(minification.getSourceMap()).get().isEqualTo(
-                "[4,9,16,25,29].find((function(n,u,e){return value>18}));");
-    }*/
+                "{\"version\":3,\"sources\":[\"0\"],\"names\":[\"numbers\",\"first\",\"find\",\"myFunction\",\"index\",\"array\",\"value\"],\"mappings\":"
+                        + "\"AAAA,IAAIA,QAAU,CAAC,EAAG,EAAG,GAAI,GAAI,IACzBC,MAAQD,QAAQE,KAAKC,YAEzB,SAASA,WAAWF,EAAOG,EAAOC,GAC9B,OAAOC,MAAQ,EACnB\"}");
+    }
 
 }

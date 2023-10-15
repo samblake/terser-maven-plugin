@@ -27,8 +27,6 @@ public class ParallelTerserMinificationStrategy implements TerserMinificationStr
     public Stream<Minification> execute(final Set<Minification> minifications) {
         final ConcurrentLinkedQueue<Minification> queue = new ConcurrentLinkedQueue<>(minifications);
 
-        CompletableFuture<Minification> future = new CompletableFuture<>();
-
         // Each thread's task is to create a terser minifier and perform as much minification as possible
         final Supplier<Collection<Minification>> task = () -> {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());

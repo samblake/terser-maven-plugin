@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -29,9 +30,10 @@ class MinificationInitializer {
 
     Set<Minification> getMinification() {
         final Set<ImmutableMinification.Builder> minifications = new HashSet<>();
-        
+
         final MinificationContext context = ImmutableMinificationContext.builder()
                 .terserSource(terserMojo.getTerserSrc())
+                .sourceMapSource(Optional.ofNullable(terserMojo.getSourceMapSrc()))
                 .charset(Charset.forName(terserMojo.getEncoding()))
                 .log(terserMojo.getLog())
                 .isVerbose(terserMojo.isVerbose())

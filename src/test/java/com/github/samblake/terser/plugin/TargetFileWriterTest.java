@@ -72,6 +72,6 @@ public class TargetFileWriterTest {
 
         // Then
         byte[] bytes = Files.readAllBytes(TMP_DIRECTORY.resolve(Paths.get("src", "test.js.map")));
-        assertThat(bytes).isEqualTo(TEST_INPUT.getBytes());
+        assertThat(bytes).isEqualTo(TEST_MAP.getBytes());
     }
 }

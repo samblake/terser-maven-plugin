@@ -29,6 +29,9 @@ public class TerserMojo extends AbstractMojo {
     @Parameter(property = "terserSrc", required = true)
     private File terserSrc;
 
+    @Parameter(property = "sourceMapSrc", required = false)
+    private File sourceMapSrc;
+
     @Parameter(property = "sourceDir", required = true)
     private File sourceDir;
 
@@ -63,11 +66,15 @@ public class TerserMojo extends AbstractMojo {
         }
 
         if (!terserSrc.exists() || !terserSrc.canRead()) {
-
             getLog().error(terserSrc.getAbsolutePath());
-
             getLog().error("Given Terser file is not reachable.");
             throw new MojoFailureException("Given Terser file is not reachable.");
+        }
+
+        if (sourceMapSrc != null && (!sourceMapSrc.exists() || !sourceMapSrc.canRead())) {
+            getLog().error(sourceMapSrc.getAbsolutePath());
+            getLog().error("Given Source Map file is not reachable.");
+            throw new MojoFailureException("Given Source Map file is not reachable.");
         }
 
         if (options.isEmpty()) {
@@ -131,6 +138,14 @@ public class TerserMojo extends AbstractMojo {
 
     public void setTerserSrc(File terserSrc) {
         this.terserSrc = terserSrc;
+    }
+
+    public File getSourceMapSrc() {
+        return sourceMapSrc;
+    }
+
+    public void setSourceMapSrc(File sourceMapSrc) {
+        this.sourceMapSrc = sourceMapSrc;
     }
 
     public File getSourceDir() {
@@ -215,6 +230,7 @@ public class TerserMojo extends AbstractMojo {
                 "verbose=" + verbose +
                 ", threads=" + threads +
                 ", terserSrc=" + terserSrc +
+                ", sourceMapSrc=" + sourceMapSrc +
                 ", sourceDir=" + sourceDir +
                 ", targetDir=" + targetDir +
                 ", jsSourceFiles=" + jsSourceFiles +

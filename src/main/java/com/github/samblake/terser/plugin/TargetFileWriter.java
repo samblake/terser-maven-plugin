@@ -20,7 +20,7 @@ class TargetFileWriter {
     }
 
     static void writeMapFile(final Minification minification) {
-        writeTargetFile(minification, Minification::getResult, m -> {
+        writeTargetFile(minification, Minification::getSourceMap, m -> {
             String fileName = m.getTarget().getFileName().toString();
             Path parent = m.getTarget().getParent();
             return parent.resolve(fileName + ".map");

@@ -51,6 +51,10 @@ public class TerserMinifier implements AutoCloseable {
         try {
             executionContext = createEngine();
 
+            if (minificationContext.getSourceMapSource().isPresent()) {
+                executionContext.eval(Source.newBuilder("js", minificationContext.getSourceMapSource().get()).build());
+            }
+
             executionContext.eval(Source.newBuilder("js", minificationContext.getTerserSource()).build());
         }
         catch (IOException e) {
@@ -100,7 +104,11 @@ public class TerserMinifier implements AutoCloseable {
                     log.debug(format("%s result:\n%s", minification.getTarget(), code));
                 }
 
-                return ImmutableMinification.copyOf(minification).withResult(code);
+                ImmutableMinification result = ImmutableMinification.copyOf(minification)
+                        .withResult(code);
+
+                String map = (String)results.get("map");
+                return map == null ? result : result.withSourceMap(map);
             }
             catch (Exception e) {
                 log.error("Invalid result: " + results.toString());
