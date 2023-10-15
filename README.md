@@ -42,7 +42,7 @@ or development version,
                     <jsSourceInclude>src/*.js</jsSourceInclude>
                 </jsSourceIncludes>
                 <suffix>min</suffix>
-                <options>{sourceMap: true}}</options>
+                <options>{sourceMap: true}</options>
             </configuration>
         </execution>
     </executions>
